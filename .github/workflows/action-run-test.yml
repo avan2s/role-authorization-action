@@ -8,4 +8,4 @@ jobs:
 
     steps:
     - name: example job
-      run: "echo hello world"
+      run: "uname -a"
