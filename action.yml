@@ -1,0 +1,8 @@
+author: avh
+description: djisjd sjd
+name: Github Role Authorization
+inputs:
+  numOctocats:
+    description: 'Number of Octocats'
+    required: false
+    default: '1'
