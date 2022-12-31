@@ -22,3 +22,10 @@ curl \
   -H "Authorization: Bearer $GITHUB_API_TOKEN"\
   -H "X-GitHub-Api-Version: 2022-11-28" \
 https://api.github.com/repos/ownerOrOrg/CIS4-eCommerce-Portal/collaborators/andreasvh-conceto/permission
+
+
+curl \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer $GITHUB_API_TOKEN"\
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+https://api.github.com/repos/CONCETO/CIS-4-Financial-Monitoring/collaborators/andreasvh-conceto/permission | jq '.user.role_nameuser'
