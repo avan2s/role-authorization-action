@@ -4,7 +4,9 @@
 OWNER=$(echo $repository | awk -F/ '{print $1}')
 REPO=$(echo $repository | awk -F/ '{print $2}')
 
-echo "OWNER: $OWNER"
+echo $repository
+echo $OWNER
+echo $REPO"
 echo "REPO: $REPO"
 echo "GITHUB_ACTOR: $GITHUB_ACTOR"
 
