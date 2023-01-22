@@ -20,7 +20,5 @@ runs:
   image: "Dockerfile"
   args:
     - ${{ inputs.GITHUB_TOKEN }}
-  env:
-    GITHUB_CONTEXT: ${{ toJson(github) }}
 
 
