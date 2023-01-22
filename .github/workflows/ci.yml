@@ -1,5 +1,5 @@
 name: Test action
-on: push@v2
+on: push
 
 jobs:
   test:
@@ -11,7 +11,7 @@ jobs:
 
     - name: Test action
       id: test-action
-      uses: ./
+      uses: ./@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
