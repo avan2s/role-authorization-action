@@ -24,7 +24,7 @@ echo $REPO
 #     echo "is_maintainer=false" >> $GITHUB_OUTPUT
 # fi
 
-"make call"
+echo "make call"
 RESPONSE=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR)
 echo $RESPONSE
 
