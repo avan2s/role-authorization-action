@@ -1,49 +1,37 @@
 #!/bin/sh
 
-set -e
+# Get the repository name and owner
+OWNER=$(echo $repository | awk -F/ '{print $1}')
+REPO=$(echo $repository | awk -F/ '{print $2}')
 
-echo "GITHUB_CONTEXT: $GITHUB_CONTEXT"
+echo "OWNER: $OWNER"
+echo "REPO: $REPO"
 
-if [ -z "$GITHUB_CONTEXT" ]; then
-    echo "GITHUB_CONTEXT is empty"
-    exit 1
-fi
-
-echo "GITHUB_ACTOR: $GITHUB_ACTOR"
-
-if [ -z "$GITHUB_ACTOR" ]; then
-    echo "GITHUB_ACTOR is empty"
-    exit 1
-fi
-
-
-
-# Get the repository owner and name
-OWNER=$(jq -r .repository.owner.login "$GITHUB_CONTEXT")
-REPO=$(jq -r .repository.name "$GITHUB_CONTEXT")
-
-# Get the user's permissions for the repository
-PERMISSIONS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission)
-
-echo "User permissions: $PERMISSIONS $GITHUB_ACTOR $REPO"
-
-# check if the user is a maintainer
-if [ "$PERMISSIONS" = "admin" ] || [ "$PERMISSIONS" = "write" ]; then
-    echo "true" > $GITHUB_ENV/is_maintainer
+# Check if the user is a maintainer
+IS_MAINTAINER=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq -r .permission)
+if [ "$IS_MAINTAINER" = "admin" ] || [ "$IS_MAINTAINER" = "write" ]; then
+    echo "User is a maintainer"
+    echo "is_maintainer=true" > $GITHUB_ENV/is_maintainer
 else
-    echo "false" > $GITHUB_ENV/is_maintainer
+    echo "User is not a maintainer"
+    echo "is_maintainer=false" > $GITHUB_ENV/is_maintainer
 fi
 
-# check if the user is an admin
-if [ "$PERMISSIONS" = "admin" ]; then
-    echo "true" > $GITHUB_ENV/is_admin
+# Check if the user is an admin
+IS_ADMIN=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq -r .permission)
+if [ "$IS_ADMIN" = "admin" ]; then
+    echo "User is an admin"
+    echo "is_admin=true" > $GITHUB_ENV/is_admin
 else
-    echo "false" > $GITHUB_ENV/is_admin
+    echo "User is not an admin"
+    echo "is_admin=false" > $GITHUB_ENV/is_admin
 fi
 
-# check if the user is an owner
+# Check if the user is the owner
 if [ "$OWNER" = "$GITHUB_ACTOR" ]; then
-    echo "true" > $GITHUB_ENV/is_owner
+    echo "User is the owner"
+    echo "is_owner=true" > $GITHUB_ENV/is_owner
 else
-    echo "false" > $GITHUB_ENV/is_owner
+    echo "User is not the owner"
+    echo "is_owner=false" > $GITHUB_ENV/is_owner
 fi

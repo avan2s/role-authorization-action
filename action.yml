@@ -1,10 +1,13 @@
-name: "Check permissions"
-description: "Check the user's permissions for the repository"
-author: "Your name or organization"
+name: Check Repo Permissions
+
+description: Check if the user is a maintainer, admin, or owner of a repository.
 
 inputs:
-  GITHUB_TOKEN:
-    description: "The GitHub token to use to authenticate with the GitHub API"
+  github_token:
+    description: GitHub token used to make API calls
+    required: true
+  repository:
+    description: Repository name in the format of owner/repo
     required: true
 
 outputs:
@@ -19,6 +22,8 @@ runs:
   using: "docker"
   image: "Dockerfile"
   args:
-    - ${{ inputs.GITHUB_TOKEN }}
-
-
+    - "entrypoint.sh"
+    - "${{ inputs.github_token }}"
+    - "${{ inputs.repository }}"
+  env:
+    GITHUB_TOKEN: "${{ inputs.github_token }}"
