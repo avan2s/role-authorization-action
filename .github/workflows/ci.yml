@@ -11,7 +11,7 @@ jobs:
 
     - name: Test action
       id: test-action
-      uses: ./@v2
+      uses: ./
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
