@@ -1,5 +1,5 @@
 name: Test action
-on: push
+on: push@v2
 
 jobs:
   test:
