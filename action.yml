@@ -1,8 +1,32 @@
-author: avh
-description: djisjd sjd
-name: Github Role Authorization
+name: 'Check user role'
+description: 'Check if the user is an admin, maintainer or owner of the repository'
 inputs:
-  numOctocats:
-    description: 'Number of Octocats'
-    required: false
-    default: '1'
+  repo_name:
+    description: 'The name of the repository'
+    default: ${{toJson(github.repository)}}
+  username:
+    description: 'The username of the user'
+    default: ${{toJson(github.actor)}}
+  token:
+    description: 'The GitHub token'
+    required: true
+
+runs:
+  using: 'docker'
+  image: 'alpine'
+  args:
+    - 'sh'
+    - '-c'
+    - |
+      apk add --no-cache curl jq
+      sh /entrypoint.sh ${{inputs.repo_name}} ${{inputs.username}} ${{inputs.token}}
+
+outputs:
+  permissions:
+    description: 'The permissions of the user'
+  is_maintainer:
+    description: 'Whether the user is a maintainer or not'
+  is_admin:
+    description: 'Whether the user is an admin or not'
+  is_owner:
+    description: 'Whether the user is the owner of the repository or not'

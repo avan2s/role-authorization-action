@@ -1,14 +1,16 @@
-on:
-  push:
-    branches:
-      - main
+name: Check user role
+
+on: [push]
+
 jobs:
-  first-job:
+  check_user_role:
     runs-on: ubuntu-latest
-
-    container:
-      image: debian:11.6
-
     steps:
-    - name: example job
-      run: "uname -a"
+    - name: Check user role
+      id: check_role
+      uses: your_repo/your_action_repo
+    - name: Print user role
+      run: |
+        echo "User is a maintainer: ${{steps.check_role.outputs.is_maintainer}}"
+        echo "User is an admin: ${{steps.check_role.outputs.is_admin}}"
+        echo "User is the owner: ${{steps.check_role.outputs.is_owner}}"
