@@ -9,6 +9,13 @@ if [ -z "$GITHUB_CONTEXT" ]; then
     exit 1
 fi
 
+echo "GITHUB_ACTOR: $GITHUB_ACTOR"
+
+if [ -z "$GITHUB_ACTOR" ]; then
+    echo "GITHUB_ACTOR is empty"
+    exit 1
+fi
+
 
 
 # Get the repository owner and name
