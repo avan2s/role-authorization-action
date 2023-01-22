@@ -17,14 +17,17 @@ jobs:
       with:
         node-version: 16
 
-    - name: Install dependencies
-      run: npm ci
-
     - name: Test action
       id: test_action
       uses: ./  # reference current version of the action in the same repository
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Print output variables
+      run: |
+        echo "is_maintainer: ${{ steps.test_action.outputs.is_maintainer }}"
+        echo "is_admin: ${{ steps.test_action.outputs.is_admin }}"
+        echo "is_owner: ${{ steps.test_action.outputs.is_owner }}"
 
     - name: Assert output variables
       run: |
