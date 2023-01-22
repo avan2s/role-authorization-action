@@ -21,6 +21,6 @@ runs:
   args:
     - ${{ inputs.GITHUB_TOKEN }}
   env:
-    GITHUB_CONTEXT: ${{ toJson(context) }}
+    GITHUB_CONTEXT: ${{ toJson(github) }}
 
 
