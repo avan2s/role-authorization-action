@@ -2,6 +2,15 @@
 
 set -e
 
+echo "GITHUB_CONTEXT: $GITHUB_CONTEXT"
+
+if [ -z "$GITHUB_CONTEXT" ]; then
+    echo "GITHUB_CONTEXT is empty"
+    exit 1
+fi
+
+
+
 # Get the repository owner and name
 OWNER=$(jq -r .repository.owner.login "$GITHUB_CONTEXT")
 REPO=$(jq -r .repository.name "$GITHUB_CONTEXT")
