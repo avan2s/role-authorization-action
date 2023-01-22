@@ -19,7 +19,7 @@ runs:
     - '-c'
     - |
       apk add --no-cache curl jq
-      sh /entrypoint.sh ${{inputs.repo_name}} ${{inputs.username}} ${{inputs.token}}
+      sh ./entrypoint.sh ${{inputs.repo_name}} ${{inputs.username}} ${{inputs.token}}
 
 outputs:
   permissions:
