@@ -25,7 +25,7 @@ echo $REPO
 # fi
 
 echo "make call"
-curl -w "%{http_code}\n" -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR | echo
+curl -w "%{http_code}\n" -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR
 
 echo "check roles..."
 
