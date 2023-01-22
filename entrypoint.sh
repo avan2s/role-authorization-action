@@ -3,13 +3,13 @@
 set -e
 
 # Get the repository owner and name
-OWNER=$(jq -r .repository.owner.login < "$GITHUB_CONTEXT")
-REPO=$(jq -r .repository.name < "$GITHUB_CONTEXT")
+OWNER=$(jq -r .repository.owner.login "$GITHUB_CONTEXT")
+REPO=$(jq -r .repository.name "$GITHUB_CONTEXT")
 
 # Get the user's permissions for the repository
 PERMISSIONS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission)
 
-echo "User permissions: $PERMISSIONS $GITHUB_ACTOR "
+echo "User permissions: $PERMISSIONS $GITHUB_ACTOR $REPO"
 
 # check if the user is a maintainer
 if [ "$PERMISSIONS" = "admin" ] || [ "$PERMISSIONS" = "write" ]; then
