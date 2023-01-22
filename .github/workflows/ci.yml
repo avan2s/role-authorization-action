@@ -1,36 +1,49 @@
-name: CI pipeline
-
-on:
-  push:
-    branches:
-      - main
+name: Test action
+on: push
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 16
-
     - name: Test action
-      id: test_action
-      uses: ./  # reference current version of the action in the same repository
+      id: test-action
+      uses: ./
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+
     - name: Print output variables
       run: |
-        echo "is_maintainer: ${{ steps.test_action.outputs.is_maintainer }}"
-        echo "is_admin: ${{ steps.test_action.outputs.is_admin }}"
-        echo "is_owner: ${{ steps.test_action.outputs.is_owner }}"
+        echo "is_maintainer: ${{ env.is_maintainer }}"
+        echo "is_admin: ${{ env.is_admin }}"
+        echo "is_owner: ${{ env.is_owner }}"
 
-    - name: Assert output variables
+    - name: Assert is_maintainer
       run: |
-        if [ "${{ steps.test_action.outputs.is_maintainer }}" != "true" ]; then exit 1; fi
-        if [ "${{ steps.test_action.outputs.is_admin }}" != "true" ]; then exit 1; fi
-        if [ "${{ steps.test_action.outputs.is_owner }}" != "true" ]; then exit 1; fi
+        if [ "${{ env.is_maintainer }}" = "true" ]; then
+            echo "is_maintainer is set correctly"
+        else
+            echo "is_maintainer is NOT set correctly"
+            exit 1
+        fi
+
+    - name: Assert is_admin
+      run: |
+        if [ "${{ env.is_admin }}" = "true" ]; then
+            echo "is_admin is set correctly"
+        else
+            echo "is_admin is NOT set correctly"
+            exit 1
+        fi
+        
+    - name: Assert is_owner
+      run: |
+        if [ "${{ env.is_owner }}" = "true" ]; then
+            echo "is_owner is set correctly"
+        else
+            echo "is_owner is NOT set correctly"
+            exit 1
+        fi

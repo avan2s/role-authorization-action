@@ -1,17 +1,33 @@
 #!/bin/sh
 
-REPO_NAME=$(jq -r '.repository.name' ${{toJson(github.event)}})
-USERNAME=$(jq -r '.actor.login' ${{toJson(github.event)}})
+set -e
 
-# Get user permissions
-PERMISSIONS=$(curl -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" -s https://api.github.com/repos/${{REPO_NAME}}/collaborators/${{USERNAME}} | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]')
+# Get the repository owner and name
+OWNER=$(jq -r .repository.owner.login <<< "$GITHUB_CONTEXT")
+REPO=$(jq -r .repository.name <<< "$GITHUB_CONTEXT")
 
-# Set output variables
-echo "Permissions are $PERMISSIONS"
-echo "::set-output name=permissions::$PERMISSIONS"
-echo "::set-output name=is_maintainer::$(echo $PERMISSIONS | grep -q maintain=true && echo true || echo false)"
-echo "::set-output name=is_admin::$(echo $PERMISSIONS | grep -q admin=true && echo true || echo false)"
+# Get the user's permissions for the repository
+PERMISSIONS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission)
 
-# Check if user is the owner
-OWNER=$(curl -H "Authorization: token ${{secrets.GITHUB_TOKEN}}" -s https://api.github.com/repos/${{REPO_NAME}} | jq -r '.owner.login')
-echo "::set-output name=is_owner::$OWNER"
+echo "User permissions: $PERMISSIONS $GITHUB_ACTOR "
+
+# check if the user is a maintainer
+if [ "$PERMISSIONS" = "admin" ] || [ "$PERMISSIONS" = "write" ]; then
+    echo "true" > $GITHUB_ENV/is_maintainer
+else
+    echo "false" > $GITHUB_ENV/is_maintainer
+fi
+
+# check if the user is an admin
+if [ "$PERMISSIONS" = "admin" ]; then
+    echo "true" > $GITHUB_ENV/is_admin
+else
+    echo "false" > $GITHUB_ENV/is_admin
+fi
+
+# check if the user is an owner
+if [ "$OWNER" = "$GITHUB_ACTOR" ]; then
+    echo "true" > $GITHUB_ENV/is_owner
+else
+    echo "false" > $GITHUB_ENV/is_owner
+fi
