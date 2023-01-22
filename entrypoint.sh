@@ -25,7 +25,10 @@ echo $REPO
 # fi
 
 echo "make call"
-curl -w "%{http_code}\n" -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq '.permissions'
+# curl -w "%{http_code}\n" -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq '.permissions'
+
+IS_MAINTAINER2=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq '.permissions.maintain')
+echo $IS_MAINTAINER2
 
 echo "check roles..."
 
