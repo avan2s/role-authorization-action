@@ -1,6 +1,10 @@
 #!/bin/sh
 
 # Get the repository name and owner
+repository="${repository%\"}"
+repository="${repository#\"}"
+
+
 OWNER=$(echo $repository | awk -F/ '{print $1}')
 REPO=$(echo $repository | awk -F/ '{print $2}')
 
