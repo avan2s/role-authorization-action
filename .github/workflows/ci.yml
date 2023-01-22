@@ -13,8 +13,8 @@ jobs:
       id: test-action
       uses: ./
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_CONTEXT: ${{ toJson(github) }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{toJson(github.repository)}}
 
     - name: Print output variables
       run: |
