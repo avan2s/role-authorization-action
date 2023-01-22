@@ -15,8 +15,17 @@ echo $REPO
 # echo "GITHUB_ACTOR: $GITHUB_ACTOR"
 
 # Check if the user is a maintainer
-IS_MAINTAINER=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq -r .permission)
-if [ "$IS_MAINTAINER" = "admin" ] || [ "$IS_MAINTAINER" = "write" ]; then
+# IS_MAINTAINER=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq -r .permission)
+# if [ "$IS_MAINTAINER" = "admin" ] || [ "$IS_MAINTAINER" = "write" ]; then
+#     echo "User is a maintainer"
+#     echo "is_maintainer=true" >> $GITHUB_OUTPUT
+# else
+#     echo "User is not a maintainer"
+#     echo "is_maintainer=false" >> $GITHUB_OUTPUT
+# fi
+
+IS_MAINTAINER=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR | jq '.permissions.maintain')
+if [ "$IS_MAINTAINER" = "true" ]; then
     echo "User is a maintainer"
     echo "is_maintainer=true" >> $GITHUB_OUTPUT
 else
