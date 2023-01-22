@@ -6,9 +6,9 @@ REPO=$(echo $repository | awk -F/ '{print $2}')
 
 echo $repository
 echo $OWNER
-echo $REPO" 
-echo "REPO: $REPO"
-echo "GITHUB_ACTOR: $GITHUB_ACTOR"
+echo $REPO
+# echo "REPO: $REPO
+# echo "GITHUB_ACTOR: $GITHUB_ACTOR"
 
 # Check if the user is a maintainer
 IS_MAINTAINER=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq -r .permission)
