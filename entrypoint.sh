@@ -8,28 +8,6 @@ repository="${repository#\"}"
 OWNER=$(echo $repository | awk -F/ '{print $1}')
 REPO=$(echo $repository | awk -F/ '{print $2}')
 
-echo $repository
-echo $OWNER
-echo $REPO
-# echo "REPO: $REPO
-# echo "GITHUB_ACTOR: $GITHUB_ACTOR"
-
-# Check if the user is a maintainer
-# IS_MAINTAINER=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq -r .permission)
-# if [ "$IS_MAINTAINER" = "admin" ] || [ "$IS_MAINTAINER" = "write" ]; then
-#     echo "User is a maintainer"
-#     echo "is_maintainer=true" >> $GITHUB_OUTPUT
-# else
-#     echo "User is not a maintainer"
-#     echo "is_maintainer=false" >> $GITHUB_OUTPUT
-# fi
-
-echo "make call"
-# curl -w "%{http_code}\n" -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq '.permissions'
-
-# IS_MAINTAINER2=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq -r '.permissions.maintain')
-# echo $IS_MAINTAINER2
-
 echo "check roles..."
 IS_MAINTAINER=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq '.user.permissions.maintain')
 
