@@ -27,13 +27,13 @@ echo $REPO
 echo "make call"
 # curl -w "%{http_code}\n" -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq '.permissions'
 
-IS_MAINTAINER2=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq '.user.permissions')
 # IS_MAINTAINER2=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq -r '.permissions.maintain')
-echo $IS_MAINTAINER2
+# echo $IS_MAINTAINER2
 
 echo "check roles..."
+IS_MAINTAINER=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR/permission | jq '.user.permissions.maintain')
 
-IS_MAINTAINER=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR | jq '.permissions.maintain')
+# IS_MAINTAINER=$(curl -s -H "Authorization: token $github_token" https://api.github.com/repos/$OWNER/$REPO/collaborators/$GITHUB_ACTOR | jq '.permissions.maintain')
 if [ "$IS_MAINTAINER" = "true" ]; then
     echo "User is a maintainer"
     echo "is_maintainer=true" >> $GITHUB_OUTPUT
